@@ -39,8 +39,7 @@
     },
     "files": [
       "src/**/*",
-      "public/**/*",
-      "node_modules/**/*"
+      "public/**/*"
     ],
     "win": {
       "target": [
@@ -49,14 +48,12 @@
           "arch": ["x64"]
         },
         {
-          "target": "portable",
+          "target": "portable", 
           "arch": ["x64"]
         }
       ],
       "requestedExecutionLevel": "asInvoker",
-      "artifactName": "${productName}-${version}-${arch}.${ext}",
-      "verifyUpdateCodeSignature": false,
-      "sign": false
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
     },
     "publish": null,
     "nsis": {
@@ -78,10 +75,7 @@
       "icon": "build/icon.png"
     },
     "extraResources": [
-      {
-        "from": "README.md",
-        "to": "README.md"
-      }
+      "README.md"
     ]
   }
 }

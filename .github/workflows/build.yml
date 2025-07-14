@@ -6,6 +6,9 @@ on:
       - 'v*'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -29,18 +32,20 @@ jobs:
         cache: 'npm'
     
     - name: Install dependencies
-      run: npm install
+      run: npm ci
     
     - name: Build for Windows
       if: matrix.platform == 'win'
       env:
         GH_TOKEN: ${{ secrets.ELECTRON_GITHUB_TOKEN }}
+        CSC_IDENTITY_AUTO_DISCOVERY: false
       run: npm run build:win
     
     - name: Build for macOS
       if: matrix.platform == 'mac'
       env:
         GH_TOKEN: ${{ secrets.ELECTRON_GITHUB_TOKEN }}
+        CSC_IDENTITY_AUTO_DISCOVERY: false
       run: npm run build:mac
     
     - name: Build for Linux
