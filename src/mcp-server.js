@@ -294,10 +294,50 @@ class ElectronMCPServer {
       }
     });
 
+    // Handle GET requests to /mcp for information
+    this.app.get('/mcp', (req, res) => {
+      res.json({
+        message: 'MCP (Model Context Protocol) Server',
+        description: 'This is a Streamable HTTP MCP server endpoint. Use POST requests to interact with the server.',
+        version: '1.0.0',
+        endpoints: {
+          health: 'GET /health',
+          mcp: 'POST /mcp'
+        },
+        usage: {
+          initialize: {
+            method: 'POST',
+            endpoint: '/mcp',
+            body: {
+              method: 'initialize',
+              params: {
+                protocolVersion: '2025-01-01',
+                capabilities: {},
+                clientInfo: {
+                  name: 'your-client',
+                  version: '1.0.0'
+                }
+              },
+              id: 1
+            }
+          },
+          listTools: {
+            method: 'POST',
+            endpoint: '/mcp',
+            body: {
+              method: 'tools/list',
+              id: 2
+            }
+          }
+        },
+        timestamp: new Date().toISOString()
+      });
+    });
+
     // Handle OPTIONS requests for CORS
     this.app.options('/mcp', (req, res) => {
       res.header('Access-Control-Allow-Origin', '*');
-      res.header('Access-Control-Allow-Methods', 'POST, OPTIONS');
+      res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
       res.header('Access-Control-Allow-Headers', 'Content-Type, Mcp-Session-Id');
       res.sendStatus(200);
     });
