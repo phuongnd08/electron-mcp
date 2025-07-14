@@ -120,10 +120,14 @@ class MCPServerUI {
 
     async openHealthCheck() {
         try {
+            if (!window.electronAPI || !window.electronAPI.openEndpoint) {
+                throw new Error('electronAPI is not available. Please reload the application.');
+            }
             await window.electronAPI.openEndpoint();
             this.addLog('ヘルスチェックページを開きました');
         } catch (error) {
             this.addLog(`ヘルスチェック開始エラー: ${error.message}`, 'error');
+            console.error('OpenHealthCheck error:', error);
         }
     }
 
@@ -178,5 +182,19 @@ function copyToClipboard(elementIdOrElement) {
 
 // Initialize the UI when the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    // Check if electronAPI is available
+    if (typeof window.electronAPI === 'undefined') {
+        console.error('electronAPI is not available. Preload script may have failed to load.');
+        document.body.innerHTML = `
+            <div style="padding: 20px; text-align: center; color: red;">
+                <h2>アプリケーション初期化エラー</h2>
+                <p>electronAPIが利用できません。アプリケーションを再起動してください。</p>
+                <button onclick="location.reload()">再読み込み</button>
+            </div>
+        `;
+        return;
+    }
+    
+    console.log('electronAPI is available, initializing UI...');
     new MCPServerUI();
 });

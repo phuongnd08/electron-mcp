@@ -83,18 +83,25 @@ class ElectronMCPApp {
         nodeIntegration: false,
         contextIsolation: true,
         preload: path.join(__dirname, 'preload.js'),
+        enableRemoteModule: false,
       },
       // icon: path.join(__dirname, '../public/icon.png'),
       title: 'Electron MCP Server',
+      show: false, // Don't show until ready
     });
 
     // Load the UI
     this.mainWindow.loadFile(path.join(__dirname, '../public/index.html'));
 
-    // Open DevTools in development
-    if (process.argv.includes('--dev')) {
-      this.mainWindow.webContents.openDevTools();
-    }
+    // Show window when ready
+    this.mainWindow.once('ready-to-show', () => {
+      this.mainWindow.show();
+      
+      // Open DevTools in development
+      if (process.argv.includes('--dev')) {
+        this.mainWindow.webContents.openDevTools();
+      }
+    });
 
     // Handle window closed
     this.mainWindow.on('closed', () => {
