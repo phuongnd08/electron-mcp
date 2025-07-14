@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electron MCP Server</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Electron MCP Server</h1>
+            <p class="subtitle">Model Context Protocol サーバーをElectronで実行</p>
+        </header>
+
+        <main>
+            <section class="status-section">
+                <h2>サーバー状態</h2>
+                <div class="status-card">
+                    <div class="status-indicator" id="status-indicator">
+                        <span class="status-dot" id="status-dot"></span>
+                        <span class="status-text" id="status-text">接続中...</span>
+                    </div>
+                    <div class="server-info">
+                        <div class="info-item">
+                            <label>ポート:</label>
+                            <span id="server-port">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>エンドポイント:</label>
+                            <span id="server-endpoint">-</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="controls-section">
+                <h2>サーバー制御</h2>
+                <div class="controls">
+                    <button id="restart-btn" class="btn btn-primary">サーバー再起動</button>
+                    <button id="stop-btn" class="btn btn-secondary">サーバー停止</button>
+                    <button id="open-health-btn" class="btn btn-tertiary">ヘルスチェックを開く</button>
+                </div>
+            </section>
+
+            <section class="usage-section">
+                <h2>使用方法</h2>
+                <div class="usage-card">
+                    <h3>MCPクライアントでの接続</h3>
+                    <p>Claude Desktopなどのアプリケーションで、以下のエンドポイントを設定してください：</p>
+                    <div class="code-block">
+                        <code id="mcp-endpoint">http://localhost:3999/mcp</code>
+                        <button class="copy-btn" onclick="copyToClipboard('mcp-endpoint')">コピー</button>
+                    </div>
+                    
+                    <h3>利用可能なツール</h3>
+                    <ul class="tools-list">
+                        <li><strong>ping</strong> - サーバーの応答確認</li>
+                        <li><strong>echo</strong> - メッセージのエコーバック</li>
+                        <li><strong>get_server_info</strong> - サーバー情報の取得</li>
+                    </ul>
+
+                    <h3>Claude Desktop設定例</h3>
+                    <div class="code-block">
+<pre>{
+  "mcpServers": {
+    "electron-mcp-server": {
+      "command": "curl",
+      "args": ["-X", "POST", "http://localhost:3999/mcp"]
+    }
+  }
+}</pre>
+                        <button class="copy-btn" onclick="copyToClipboard(this.previousElementSibling)">コピー</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="logs-section">
+                <h2>ログ</h2>
+                <div class="logs-container">
+                    <div id="logs" class="logs"></div>
+                    <button id="clear-logs-btn" class="btn btn-small">ログクリア</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+</html>
