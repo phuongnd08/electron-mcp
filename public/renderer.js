@@ -180,21 +180,51 @@ function copyToClipboard(elementIdOrElement) {
     });
 }
 
+// Wait for electronAPI to be available
+function waitForElectronAPI() {
+    return new Promise((resolve, reject) => {
+        if (window.electronAPI) {
+            resolve();
+            return;
+        }
+        
+        let attempts = 0;
+        const maxAttempts = 50; // 5秒間の試行
+        
+        const checkAPI = () => {
+            attempts++;
+            if (window.electronAPI) {
+                console.log('electronAPI is now available');
+                resolve();
+            } else if (attempts >= maxAttempts) {
+                console.error('electronAPI failed to load after maximum attempts');
+                reject(new Error('electronAPI is not available'));
+            } else {
+                setTimeout(checkAPI, 100);
+            }
+        };
+        
+        setTimeout(checkAPI, 100);
+    });
+}
+
 // Initialize the UI when the DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    // Check if electronAPI is available
-    if (typeof window.electronAPI === 'undefined') {
-        console.error('electronAPI is not available. Preload script may have failed to load.');
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        await waitForElectronAPI();
+        console.log('electronAPI is available, initializing UI...');
+        new MCPServerUI();
+    } catch (error) {
+        console.error('Failed to initialize:', error);
         document.body.innerHTML = `
             <div style="padding: 20px; text-align: center; color: red;">
                 <h2>アプリケーション初期化エラー</h2>
                 <p>electronAPIが利用できません。アプリケーションを再起動してください。</p>
                 <button onclick="location.reload()">再読み込み</button>
+                <div style="margin-top: 10px; font-size: 0.9em; color: #666;">
+                    エラー: ${error.message}
+                </div>
             </div>
         `;
-        return;
     }
-    
-    console.log('electronAPI is available, initializing UI...');
-    new MCPServerUI();
 });
