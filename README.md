@@ -120,9 +120,12 @@ curl -X POST http://localhost:3999/mcp \
 
 ### 実行ファイルの作成
 
+#### ローカルでのビルド
+
+**環境変数を設定してビルド：**
 ```bash
-# 全プラットフォーム向け
-npm run build
+# GitHub Personal Access Tokenを設定
+export GH_TOKEN=your_github_token
 
 # Windows向け
 npm run build:win
@@ -134,7 +137,23 @@ npm run build:mac
 npm run build:linux
 ```
 
+**または.envファイルを使用：**
+```bash
+# .env.exampleをコピーして設定
+cp .env.example .env
+# .envファイルを編集してGH_TOKENを設定
+npm run build:win
+```
+
+#### GitHub Actionsでの自動ビルド
+
+1. リポジトリの**Settings** → **Secrets and variables** → **Actions**
+2. `ELECTRON_GITHUB_TOKEN`をRepository Secretとして追加
+3. タグをpushまたはworkflow_dispatchで自動ビルド
+
 ビルドされたファイルは`dist/`フォルダに出力されます。
+
+> **⚠️ セキュリティ注意**: `.env`ファイルは絶対にリポジトリにコミットしないでください。
 
 ## 開発
 
