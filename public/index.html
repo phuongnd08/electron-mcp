@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,24 +10,24 @@
     <div class="container">
         <header>
             <h1>🚀 Electron MCP Server</h1>
-            <p class="subtitle">Model Context Protocol サーバーをElectronで実行</p>
+            <p class="subtitle">Running Model Context Protocol Server with Electron</p>
         </header>
 
         <main>
             <section class="status-section">
-                <h2>サーバー状態</h2>
+                <h2>Server Status</h2>
                 <div class="status-card">
                     <div class="status-indicator" id="status-indicator">
                         <span class="status-dot" id="status-dot"></span>
-                        <span class="status-text" id="status-text">接続中...</span>
+                        <span class="status-text" id="status-text">Connecting...</span>
                     </div>
                     <div class="server-info">
                         <div class="info-item">
-                            <label>ポート:</label>
+                            <label>Port:</label>
                             <span id="server-port">-</span>
                         </div>
                         <div class="info-item">
-                            <label>エンドポイント:</label>
+                            <label>Endpoint:</label>
                             <span id="server-endpoint">-</span>
                         </div>
                     </div>
@@ -35,34 +35,34 @@
             </section>
 
             <section class="controls-section">
-                <h2>サーバー制御</h2>
+                <h2>Server Control</h2>
                 <div class="controls">
-                    <button id="restart-btn" class="btn btn-primary">サーバー再起動</button>
-                    <button id="stop-btn" class="btn btn-secondary">サーバー停止</button>
-                    <button id="open-health-btn" class="btn btn-tertiary">ヘルスチェックを開く</button>
+                    <button id="restart-btn" class="btn btn-primary">Restart Server</button>
+                    <button id="stop-btn" class="btn btn-secondary">Stop Server</button>
+                    <button id="open-health-btn" class="btn btn-tertiary">Open Health Check</button>
                 </div>
             </section>
 
             <section class="usage-section">
-                <h2>使用方法</h2>
+                <h2>Usage</h2>
                 <div class="usage-card">
-                    <h3>MCPクライアントでの接続</h3>
-                    <p>Claude Desktopなどのアプリケーションで、以下のエンドポイントを設定してください：</p>
+                    <h3>Connecting with MCP Client</h3>
+                    <p>Set the following endpoint in applications like Claude Desktop:</p>
                     <div class="code-block">
                         <code id="mcp-endpoint">http://localhost:3999/mcp</code>
-                        <button class="copy-btn" onclick="copyToClipboard('mcp-endpoint')">コピー</button>
+                        <button class="copy-btn" onclick="copyToClipboard('mcp-endpoint')">Copy</button>
                     </div>
                     
-                    <p><strong>注意:</strong> ブラウザでアクセスする場合は情報表示のみです。実際のMCP通信はPOSTリクエストで行います。</p>
+                    <p><strong>Note:</strong> Browser access is for information display only. Actual MCP communication is done via POST requests.</p>
                     
-                    <h3>利用可能なツール</h3>
+                    <h3>Available Tools</h3>
                     <ul class="tools-list">
-                        <li><strong>ping</strong> - サーバーの応答確認</li>
-                        <li><strong>echo</strong> - メッセージのエコーバック</li>
-                        <li><strong>get_server_info</strong> - サーバー情報の取得</li>
+                        <li><strong>ping</strong> - Check server response</li>
+                        <li><strong>echo</strong> - Echo back messages</li>
+                        <li><strong>get_server_info</strong> - Get server information</li>
                     </ul>
 
-                    <h3>Claude Desktop設定例</h3>
+                    <h3>Claude Desktop Configuration Example</h3>
                     <div class="code-block">
 <pre>{
   "mcpServers": {
@@ -72,16 +72,16 @@
     }
   }
 }</pre>
-                        <button class="copy-btn" onclick="copyToClipboard(this.previousElementSibling)">コピー</button>
+                        <button class="copy-btn" onclick="copyToClipboard(this.previousElementSibling)">Copy</button>
                     </div>
                 </div>
             </section>
 
             <section class="logs-section">
-                <h2>ログ</h2>
+                <h2>Logs</h2>
                 <div class="logs-container">
                     <div id="logs" class="logs"></div>
-                    <button id="clear-logs-btn" class="btn btn-small">ログクリア</button>
+                    <button id="clear-logs-btn" class="btn btn-small">Clear Logs</button>
                 </div>
             </section>
         </main>

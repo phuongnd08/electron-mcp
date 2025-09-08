@@ -1,46 +1,46 @@
 # Electron MCP Server 🚀
 
-**ElectronでModel Context Protocol (MCP) サーバを実装したアプリケーション**
+**Model Context Protocol (MCP) Server Application built with Electron**
 
-ElectronアプリケーションとしてMCPサーバを起動し、Claude DesktopなどのAIアプリケーションから簡単に利用できるようにします。npxやNode.jsのインストールが不要で、エンジニアでない方でも簡単に使用できます。
+Launch MCP server as an Electron application for easy use with AI applications like Claude Desktop. No npx or Node.js installation required, making it accessible to non-engineers.
 
-## 特徴
+## Features
 
-- ✅ **簡単起動**: Electronアプリとして起動するだけでMCPサーバが開始
-- ✅ **Streamable HTTP対応**: 最新のMCP仕様に準拠
-- ✅ **GUI管理**: サーバー状態の監視と制御が可能
-- ✅ **クロスプラットフォーム**: Windows、macOS、Linuxで動作
-- ✅ **npx不要**: 実行ファイルとして配布可能
+- ✅ **Easy Launch**: Start MCP server simply by launching the Electron app
+- ✅ **Streamable HTTP Support**: Compliant with the latest MCP specifications
+- ✅ **GUI Management**: Monitor and control server status
+- ✅ **Cross-platform**: Works on Windows, macOS, and Linux
+- ✅ **No npx Required**: Can be distributed as an executable file
 
-## クイックスタート
+## Quick Start
 
-### 開発環境での実行
+### Running in Development Environment
 
-1. **依存関係のインストール**
+1. **Install Dependencies**
    ```bash
    npm install
    ```
 
-2. **アプリケーションの起動**
+2. **Launch Application**
    ```bash
    npm start
    ```
 
-3. **開発モードで起動**（DevToolsが開きます）
+3. **Launch in Development Mode** (Opens DevTools)
    ```bash
    npm run dev
    ```
 
-アプリケーションが起動すると、自動的にポート3999でMCPサーバが開始されます。
+When the application launches, the MCP server automatically starts on port 3999.
 
-### MCPエンドポイント
+### MCP Endpoints
 
-- **メインエンドポイント**: `http://localhost:3999/mcp`
-- **ヘルスチェック**: `http://localhost:3999/health`
+- **Main Endpoint**: `http://localhost:3999/mcp`
+- **Health Check**: `http://localhost:3999/health`
 
-## Claude Desktopでの設定
+## Claude Desktop Configuration
 
-Claude Desktopの設定ファイル（`claude_desktop_config.json`）に以下を追加：
+Add the following to Claude Desktop's configuration file (`claude_desktop_config.json`):
 
 ```json
 {
@@ -58,10 +58,10 @@ Claude Desktopの設定ファイル（`claude_desktop_config.json`）に以下�
 }
 ```
 
-## 利用可能なツール
+## Available Tools
 
 ### 1. ping
-サーバーの応答確認用ツール
+Tool for checking server response
 ```json
 {
   "method": "tools/call",
@@ -75,21 +75,21 @@ Claude Desktopの設定ファイル（`claude_desktop_config.json`）に以下�
 ```
 
 ### 2. echo
-メッセージをそのまま返すツール
+Tool that returns messages as-is
 ```json
 {
   "method": "tools/call",
   "params": {
     "name": "echo",
     "arguments": {
-      "message": "返したいメッセージ"
+      "message": "Message to return"
     }
   }
 }
 ```
 
 ### 3. get_server_info
-サーバー情報を取得するツール
+Tool to get server information
 ```json
 {
   "method": "tools/call",
@@ -100,145 +100,145 @@ Claude Desktopの設定ファイル（`claude_desktop_config.json`）に以下�
 }
 ```
 
-## API使用例
+## API Usage Examples
 
-### ツール一覧の取得
+### Get Tool List
 ```bash
 curl -X POST http://localhost:3999/mcp \
   -H "Content-Type: application/json" \
   -d '{"method": "tools/list", "id": 1}'
 ```
 
-### pingツールの実行
+### Execute ping Tool
 ```bash
 curl -X POST http://localhost:3999/mcp \
   -H "Content-Type: application/json" \
   -d '{"method": "tools/call", "params": {"name": "ping", "arguments": {"message": "Test"}}, "id": 2}'
 ```
 
-## ビルドと配布
+## Build and Distribution
 
-### 実行ファイルの作成
+### Creating Executable Files
 
-#### ローカルでのビルド
+#### Local Build
 
-**環境変数を設定してビルド：**
+**Build with environment variables:**
 ```bash
-# GitHub Personal Access Tokenを設定
+# Set GitHub Personal Access Token
 export GH_TOKEN=your_github_token
 
-# Windows向け
+# For Windows
 npm run build:win
 
-# macOS向け
+# For macOS
 npm run build:mac
 
-# Linux向け
+# For Linux
 npm run build:linux
 ```
 
-**または.envファイルを使用：**
+**Or use .env file:**
 ```bash
-# .env.exampleをコピーして設定
+# Copy .env.example and configure
 cp .env.example .env
-# .envファイルを編集してGH_TOKENを設定
+# Edit .env file to set GH_TOKEN
 npm run build:win
 ```
 
-#### GitHub Actionsでの自動ビルド
+#### Automatic Build with GitHub Actions
 
-1. リポジトリの**Settings** → **Secrets and variables** → **Actions**
-2. `ELECTRON_GITHUB_TOKEN`をRepository Secretとして追加
-3. タグをpushまたはworkflow_dispatchで自動ビルド
+1. Repository **Settings** → **Secrets and variables** → **Actions**
+2. Add `ELECTRON_GITHUB_TOKEN` as Repository Secret
+3. Auto-build by pushing tag or workflow_dispatch
 
-ビルドされたファイルは`dist/`フォルダに出力されます。
+Built files are output to the `dist/` folder.
 
-> **⚠️ セキュリティ注意**: `.env`ファイルは絶対にリポジトリにコミットしないでください。
+> **⚠️ Security Notice**: Never commit `.env` file to the repository.
 
-## 開発
+## Development
 
-### プロジェクト構造
+### Project Structure
 
 ```
 electron-mcp/
 ├── src/
-│   ├── main.js          # Electronメインプロセス
-│   ├── mcp-server.js    # MCPサーバー実装
-│   └── preload.js       # プリロードスクリプト
+│   ├── main.js          # Electron main process
+│   ├── mcp-server.js    # MCP server implementation
+│   └── preload.js       # Preload script
 ├── public/
 │   ├── index.html       # UI
-│   ├── style.css        # スタイル
-│   └── renderer.js      # レンダラープロセス
+│   ├── style.css        # Styles
+│   └── renderer.js      # Renderer process
 ├── package.json
 └── README.md
 ```
 
-### カスタムツールの追加
+### Adding Custom Tools
 
-`src/mcp-server.js`の`setupMCPHandlers()`メソッドで新しいツールを追加できます：
+You can add new tools in the `setupMCPHandlers()` method of `src/mcp-server.js`:
 
 ```javascript
-// tools/listハンドラーにツールを追加
+// Add tool to tools/list handler
 {
   name: 'my_custom_tool',
-  description: 'カスタムツールの説明',
+  description: 'Custom tool description',
   inputSchema: {
     type: 'object',
     properties: {
       param1: {
         type: 'string',
-        description: 'パラメータの説明'
+        description: 'Parameter description'
       }
     },
     required: ['param1']
   }
 }
 
-// tools/callハンドラーに処理を追加
+// Add processing to tools/call handler
 case 'my_custom_tool':
   return {
     content: [{
       type: 'text',
-      text: `結果: ${args.param1}`
+      text: `Result: ${args.param1}`
     }]
   };
 ```
 
-## トラブルシューティング
+## Troubleshooting
 
-### ポート3999が使用中の場合
+### When Port 3999 is in Use
 
-環境変数`MCP_PORT`でポートを変更できます：
+You can change the port with environment variable `MCP_PORT`:
 
 ```bash
 MCP_PORT=4000 npm start
 ```
 
-### WSL環境でのDBusエラー
+### DBus Error in WSL Environment
 
-WSL環境では以下のエラーが表示される場合がありますが、アプリケーションの動作には影響しません：
+In WSL environment, the following error may appear but does not affect application functionality:
 
 ```
 ERROR:object_proxy.cc(577)] Failed to call method: org.freedesktop.DBus.StartServiceByName
 ```
 
-## ライセンス
+## License
 
 MIT License
 
-## 技術スタック
+## Technology Stack
 
 - **Electron**: ^28.0.0
 - **Express**: ^4.18.2
 - **@modelcontextprotocol/sdk**: ^0.5.0
 - **CORS**: ^2.8.5
 
-## 貢献
+## Contributing
 
-Issues、Pull Requestを歓迎します。
+Issues and Pull Requests are welcome.
 
-## リンク
+## Links
 
-- [Model Context Protocol公式サイト](https://modelcontextprotocol.io/)
+- [Model Context Protocol Official Site](https://modelcontextprotocol.io/)
 - [Claude Desktop](https://claude.ai/desktop)
-- [Electron公式サイト](https://www.electronjs.org/)
+- [Electron Official Site](https://www.electronjs.org/)

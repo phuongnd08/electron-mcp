@@ -28,12 +28,12 @@ class MCPServerUI {
         // Listen for server status changes
         window.electronAPI.onServerStatusChanged((event, status) => {
             this.updateUI(status);
-            this.addLog(`サーバー状態が変更されました: ${status.running ? '実行中' : '停止中'}`);
+            this.addLog(`Server status changed: ${status.running ? 'Running' : 'Stopped'}`);
         });
 
         // Listen for server errors
         window.electronAPI.onServerError((event, error) => {
-            this.addLog(`エラー: ${error}`, 'error');
+            this.addLog(`Error: ${error}`, 'error');
             this.updateUI({ running: false });
         });
     }
@@ -44,14 +44,14 @@ class MCPServerUI {
             this.updateUI(status);
         } catch (error) {
             console.error('Failed to get server status:', error);
-            this.addLog(`状態取得エラー: ${error.message}`, 'error');
+            this.addLog(`Status fetch error: ${error.message}`, 'error');
         }
     }
 
     updateUI(status) {
         if (status.running) {
             this.statusDot.className = 'status-dot running';
-            this.statusText.textContent = '実行中';
+            this.statusText.textContent = 'Running';
             this.serverPort.textContent = status.port;
             this.serverEndpoint.textContent = status.endpoint;
             this.mcpEndpoint.textContent = status.endpoint;
@@ -61,7 +61,7 @@ class MCPServerUI {
             this.openHealthBtn.disabled = false;
         } else {
             this.statusDot.className = 'status-dot stopped';
-            this.statusText.textContent = '停止中';
+            this.statusText.textContent = 'Stopped';
             this.serverPort.textContent = '-';
             this.serverEndpoint.textContent = '-';
             this.mcpEndpoint.textContent = 'http://localhost:3999/mcp';
@@ -75,20 +75,20 @@ class MCPServerUI {
     async restartServer() {
         try {
             this.statusDot.className = 'status-dot loading';
-            this.statusText.textContent = '再起動中...';
+            this.statusText.textContent = 'Restarting...';
             this.restartBtn.disabled = true;
             
-            this.addLog('サーバーを再起動しています...');
+            this.addLog('Restarting server...');
             
             const result = await window.electronAPI.restartServer();
             
             if (result.success) {
-                this.addLog('サーバーが正常に再起動されました', 'success');
+                this.addLog('Server restarted successfully', 'success');
             } else {
-                this.addLog(`再起動失敗: ${result.error}`, 'error');
+                this.addLog(`Restart failed: ${result.error}`, 'error');
             }
         } catch (error) {
-            this.addLog(`再起動エラー: ${error.message}`, 'error');
+            this.addLog(`Restart error: ${error.message}`, 'error');
         } finally {
             this.restartBtn.disabled = false;
             await this.updateServerStatus();
@@ -98,20 +98,20 @@ class MCPServerUI {
     async stopServer() {
         try {
             this.statusDot.className = 'status-dot loading';
-            this.statusText.textContent = '停止中...';
+            this.statusText.textContent = 'Stopping...';
             this.stopBtn.disabled = true;
             
-            this.addLog('サーバーを停止しています...');
+            this.addLog('Stopping server...');
             
             const result = await window.electronAPI.stopServer();
             
             if (result.success) {
-                this.addLog('サーバーが正常に停止されました', 'success');
+                this.addLog('Server stopped successfully', 'success');
             } else {
-                this.addLog(`停止失敗: ${result.error}`, 'error');
+                this.addLog(`Stop failed: ${result.error}`, 'error');
             }
         } catch (error) {
-            this.addLog(`停止エラー: ${error.message}`, 'error');
+            this.addLog(`Stop error: ${error.message}`, 'error');
         } finally {
             this.stopBtn.disabled = false;
             await this.updateServerStatus();
@@ -124,15 +124,15 @@ class MCPServerUI {
                 throw new Error('electronAPI is not available. Please reload the application.');
             }
             await window.electronAPI.openEndpoint();
-            this.addLog('ヘルスチェックページを開きました');
+            this.addLog('Opened health check page');
         } catch (error) {
-            this.addLog(`ヘルスチェック開始エラー: ${error.message}`, 'error');
+            this.addLog(`Health check open error: ${error.message}`, 'error');
             console.error('OpenHealthCheck error:', error);
         }
     }
 
     addLog(message, type = 'info') {
-        const timestamp = new Date().toLocaleTimeString('ja-JP');
+        const timestamp = new Date().toLocaleTimeString('en-US');
         const logClass = type === 'error' ? 'error' : type === 'success' ? 'success' : 'info';
         const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : 'ℹ️';
         
@@ -143,7 +143,7 @@ class MCPServerUI {
 
     clearLogs() {
         this.logs.textContent = '';
-        this.addLog('ログをクリアしました');
+        this.addLog('Logs cleared');
     }
 }
 
@@ -166,7 +166,7 @@ function copyToClipboard(elementIdOrElement) {
         
         if (element) {
             const feedback = document.createElement('span');
-            feedback.textContent = 'コピーしました！';
+            feedback.textContent = 'Copied!';
             feedback.style.color = '#10b981';
             feedback.style.fontWeight = 'bold';
             
@@ -189,7 +189,7 @@ function waitForElectronAPI() {
         }
         
         let attempts = 0;
-        const maxAttempts = 50; // 5秒間の試行
+        const maxAttempts = 50; // 5 seconds of attempts
         
         const checkAPI = () => {
             attempts++;
@@ -218,11 +218,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Failed to initialize:', error);
         document.body.innerHTML = `
             <div style="padding: 20px; text-align: center; color: red;">
-                <h2>アプリケーション初期化エラー</h2>
-                <p>electronAPIが利用できません。アプリケーションを再起動してください。</p>
-                <button onclick="location.reload()">再読み込み</button>
+                <h2>Application Initialization Error</h2>
+                <p>electronAPI is not available. Please restart the application.</p>
+                <button onclick="location.reload()">Reload</button>
                 <div style="margin-top: 10px; font-size: 0.9em; color: #666;">
-                    エラー: ${error.message}
+                    Error: ${error.message}
                 </div>
             </div>
         `;

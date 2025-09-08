@@ -255,7 +255,7 @@ h2 {
 }
 
 .logs:empty::before {
-    content: "ログはありません...";
+    content: "No logs available...";
     color: #9ca3af;
     font-style: italic;
 }
